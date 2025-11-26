@@ -1,0 +1,26 @@
+{
+  "name": "create-jexts",
+  "version": "1.0.9",
+  "description": "Generate a complete Express + JavaScript/TypeScript backend project.",
+  "bin": {
+    "create-jexts": "bin/index.js"
+  },
+  "type": "module",
+  "files": [
+    "index.js",
+    "templates"
+  ],
+  "keywords": [
+    "express",
+    "JavaScript",
+    "typescript",
+    "backend",
+    "generator"
+  ],
+  "dependencies": {
+    "prompts": "^2.4.2",
+    "fs-extra": "^11.1.1"
+  },
+  "author": "Jay Rathore",
+  "license": "MIT"
+}
