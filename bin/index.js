@@ -36,6 +36,17 @@ async function main() {
   const templateDir = path.join(__dirname, "..", "templates", language);
   await fs.copy(templateDir, targetDir);
 
+  // Fix gitignore issue 
+  // npm don't let us to download .gitignore directly so we 
+  // make gitignore then conver it to .gitignore 
+  
+  const gitignorePath = path.join(targetDir, "gitignore");
+  const dotGitignorePath = path.join(targetDir, ".gitignore");
+
+  if (fs.existsSync(gitignorePath)) {
+    await fs.rename(gitignorePath, dotGitignorePath);
+  }
+
   console.log("\nProject created successfully.");
   console.log("Installing dependencies...\n");
 
