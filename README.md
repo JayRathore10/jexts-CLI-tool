@@ -51,6 +51,7 @@ A typical project looks like:
 project-name/
 ├─ src/          # Source files (TS or JS)
 ├─ dist/         # Compiled files (TS only)
+├─ .gitignore
 ├─ node_modules/
 ├─ package.json
 └─ tsconfig.json # Only for TS projects
