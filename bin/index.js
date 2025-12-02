@@ -29,7 +29,12 @@ async function main() {
 
   const { language, projectName } = response;
 
-  const targetDir = path.join(process.cwd(), projectName);
+  // Removing the extra tailing spaces (also extra leading space)
+  // if we not remove them it make the project folder but we can't access that folder 
+
+  const projectNameTrimmed = projectName.trim();
+
+  const targetDir = path.join(process.cwd(), projectNameTrimmed);
   await fs.mkdirp(targetDir);
 
   // copy template
@@ -58,7 +63,7 @@ async function main() {
   }
 
   console.log(`\nNext steps:`);
-  console.log(`cd ${projectName}`);
+  console.log(`cd ${projectNameTrimmed}`);
   console.log(`npm run dev`);
 }
 
