@@ -41,6 +41,24 @@ async function main() {
   const templateDir = path.join(__dirname, "..", "templates", language);
   await fs.copy(templateDir, targetDir);
 
+  // Make the package.json's name is equal to projectName 
+
+  const packageJsonPath = path.join(targetDir , "package.json");
+  
+  if(await fs.pathExists(packageJsonPath)){
+    const packageJson = await fs.readJson(packageJsonPath);
+
+    packageJson.name = projectNameTrimmed
+    .toLowerCase()
+    .replace(/\s+/g , "-"); // npm-safe name
+    
+    // signification of .replace(/\s+/g , "-") is 
+    // \s = any whiteSpace character , + indicate whitespace one or more times
+    // /g represent global (replace all space with '-' )
+
+    await fs.writeJson(packageJsonPath , packageJson , {spaces : 2});
+  }
+
   // Fix gitignore issue 
   // npm don't let us to download .gitignore directly so we 
   // make gitignore then conver it to .gitignore 
@@ -68,3 +86,16 @@ async function main() {
 }
 
 main();
+
+
+// IMPORTANT ---------------------------------------------
+/*
+  ADD THE NAME OF THE FOLDER TO PACKAGE.JSON 
+  "jexts" to actual folder name 
+*/
+
+/*
+  WE HAVE TO ADD CHALK TO IT FOR COLOUR FULL OUTPUT AND SO MANY THINGS TO IT .
+  {FOCUS ON STYLING}
+  SERVER AUTOSTART I ALSO HAVE TO ADD THIS 
+*/
