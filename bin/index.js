@@ -88,12 +88,6 @@ async function main() {
 main();
 
 
-// IMPORTANT ---------------------------------------------
-/*
-  ADD THE NAME OF THE FOLDER TO PACKAGE.JSON 
-  "jexts" to actual folder name 
-*/
-
 /*
   WE HAVE TO ADD CHALK TO IT FOR COLOUR FULL OUTPUT AND SO MANY THINGS TO IT .
   {FOCUS ON STYLING}
