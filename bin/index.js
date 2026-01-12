@@ -92,4 +92,11 @@ main();
   WE HAVE TO ADD CHALK TO IT FOR COLOUR FULL OUTPUT AND SO MANY THINGS TO IT .
   {FOCUS ON STYLING}
   SERVER AUTOSTART I ALSO HAVE TO ADD THIS 
+
+  Add screenshot and logo to readme 
+  and review website link in it 
+
+  Add more features like not get all folder (selected folders)  
+  Add env 
+
 */
