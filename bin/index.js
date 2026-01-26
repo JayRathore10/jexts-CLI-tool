@@ -100,3 +100,13 @@ main();
   Add env 
 
 */
+
+
+/**
+ * 
+ * add cors like 
+ * if someone wrote 
+ * npm create jexts@latest --react 
+ * then cors auto connect to react localhost:5173 directly no need to external insatllation and setup 
+ * 
+ */
