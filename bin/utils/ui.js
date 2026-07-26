@@ -88,3 +88,40 @@ You can continue manually:
     )
   );
 }
+
+export function showInstallError(config) {
+  console.log();
+
+  console.log(
+    boxen(
+`Dependency installation failed.
+
+You can continue manually:
+
+cd ${config.projectName}
+${getInstallCommand(config.packageManager)}
+`,
+      {
+        padding: 1,
+        borderStyle: "round",
+        borderColor: "yellow"
+      }
+    )
+  );
+}
+
+function getInstallCommand(packageManager) {
+  switch (packageManager) {
+    case "pnpm":
+      return "pnpm install";
+
+    case "yarn":
+      return "yarn";
+
+    case "bun":
+      return "bun install";
+
+    default:
+      return "npm install";
+  }
+}
