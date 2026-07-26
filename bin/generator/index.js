@@ -17,6 +17,4 @@ export async function generateProject(config) {
   await installDependencies(config);
 
   await initializeGit(config);
-
-
 }

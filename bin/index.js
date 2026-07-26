@@ -1,18 +1,22 @@
 #!/usr/bin/env node
 
-import { showHeader } from "./utils/ui.js";
+import { showHeader, showCompletion } from "./utils/ui.js";
 import { promptUser } from "./prompts/index.js";
 import { generateProject } from "./generator/index.js";
-import { showCompletion } from "./utils/ui.js";
 
 async function main() {
-  showHeader();
+  try {
+    showHeader();
 
-  const config = await promptUser();
+    const config = await promptUser();
 
-  await generateProject(config);
+    await generateProject(config);
 
-  showCompletion(config);
+    showCompletion(config);
+  } catch (error) {
+    console.error(error);
+    process.exit(1);
+  }
 }
 
 main();
