@@ -59,36 +59,6 @@ ${colors.heading("Next steps")}
   );
 }
 
-export function showInstallError(projectName, packageManager) {
-  const installCommand =
-    packageManager === "npm"
-      ? "npm install"
-      : packageManager === "pnpm"
-      ? "pnpm install"
-      : packageManager === "bun"
-      ? "bun install"
-      : "yarn";
-
-  console.log();
-
-  console.log(
-    boxen(
-`${colors.error("Dependency installation failed.")}
-
-You can continue manually:
-
-  ${colors.primary(`cd ${projectName}`)}
-  ${colors.primary(installCommand)}
-`,
-      {
-        padding: 1,
-        borderStyle: "round",
-        borderColor: "yellow"
-      }
-    )
-  );
-}
-
 export function showInstallError(config) {
   console.log();
 
@@ -110,7 +80,7 @@ ${getInstallCommand(config.packageManager)}
   );
 }
 
-function getInstallCommand(packageManager) {
+export function getInstallCommand(packageManager) {
   switch (packageManager) {
     case "pnpm":
       return "pnpm install";
@@ -123,5 +93,21 @@ function getInstallCommand(packageManager) {
 
     default:
       return "npm install";
+  }
+}
+
+export function getRunCommand(packageManager) {
+  switch (packageManager) {
+    case "pnpm":
+      return "pnpm dev";
+
+    case "yarn":
+      return "yarn dev";
+
+    case "bun":
+      return "bun run dev";
+
+    default:
+      return "npm run dev";
   }
 }
