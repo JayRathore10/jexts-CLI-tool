@@ -110,3 +110,10 @@ main();
  * then cors auto connect to react localhost:5173 directly no need to external insatllation and setup 
  * 
  */
+
+/**
+ * 
+ * Add  docs like react to it
+ * that provide a some things about the jexts 
+ * 
+ */
