@@ -176,8 +176,8 @@ datasource db {
 async function setupDrizzle(config) {
 
   config.dependencies = {
-    ...config.dependencies,
-    drizzle-orm: "latest"
+    ...config.dependencies , 
+    "drizzle-orm": "latest"
   };
 
 
