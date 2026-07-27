@@ -30,31 +30,3 @@ export async function installDependencies(config) {
     throw error;
   }
 }
-
-function getInstallCommand(packageManager) {
-  switch (packageManager) {
-    case "pnpm":
-      return {
-        command: "pnpm",
-        args: ["install"]
-      };
-
-    case "yarn":
-      return {
-        command: "yarn",
-        args: []
-      };
-
-    case "bun":
-      return {
-        command: "bun",
-        args: ["install"]
-      };
-
-    default:
-      return {
-        command: "npm",
-        args: ["install"]
-      };
-  }
-}

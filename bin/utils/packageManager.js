@@ -23,22 +23,6 @@ export function detectPackageManager() {
   return "npm";
 }
 
-export function getInstallCommand(packageManager) {
-  switch (packageManager) {
-    case "pnpm":
-      return "pnpm install";
-
-    case "yarn":
-      return "yarn";
-
-    case "bun":
-      return "bun install";
-
-    default:
-      return "npm install";
-  }
-}
-
 export function getRunCommand(packageManager) {
   switch (packageManager) {
     case "pnpm":

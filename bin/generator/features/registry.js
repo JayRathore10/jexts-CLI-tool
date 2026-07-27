@@ -25,7 +25,7 @@ const features = [
 
 
 
-export async function setupFeatures(config) {
+export async function featureRegistry(config) {
 
   for (const feature of features) {
 

@@ -7,8 +7,8 @@ import { createEnvFile } from "./env.js";
 import { updateServer } from "./updateServer.js";
 import { configureGitignore } from "./gitignore.js";
 import { initializeGit } from "./git.js";
-import { installDependencies } from "./install.js";
-import { ROOT_DIR } from "../utils/paths.js";
+import { installDependencies } from "./installDependencies.js";
+import { ROOT_DIR } from "../utils/path.js";
 
 export async function generateProject(config) {
   const targetDir = path.join(
@@ -31,7 +31,7 @@ export async function generateProject(config) {
   await setupFeatures(
     config
   );
-  
+
   await createEnvFile(
     config
   );
