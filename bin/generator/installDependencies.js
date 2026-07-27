@@ -10,13 +10,6 @@ export async function installDependencies(config) {
       config.packageManager
     );
 
-    console.log({
-      packageManager: config.packageManager,
-      command,
-      args,
-      targetDir: config.targetDir
-    });
-
     spinner.stop();
 
     const result = spawnSync(command, args, {
