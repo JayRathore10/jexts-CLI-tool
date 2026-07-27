@@ -27,11 +27,12 @@ export async function generateProject(config) {
     config
   );
 
-  await createEnvFile(
+  
+  await setupFeatures(
     config
   );
-
-  await setupFeatures(
+  
+  await createEnvFile(
     config
   );
 

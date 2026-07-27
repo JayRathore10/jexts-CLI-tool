@@ -5,6 +5,7 @@ import { createSpinner } from "../utils/ui.js";
 
 export async function updatePackageJson(config) {
 
+
   const spinner = createSpinner(
     "Updating package.json"
   ).start();
@@ -12,65 +13,81 @@ export async function updatePackageJson(config) {
 
   try {
 
-    const packageJsonPath = path.join(
-      config.targetDir,
-      "package.json"
-    );
+
+    const packageJsonPath =
+      path.join(
+        config.targetDir,
+        "package.json"
+      );
 
 
-    if (await fs.pathExists(packageJsonPath)) {
+    if (
+      !await fs.pathExists(packageJsonPath)
+    ) {
 
-      const packageJson = await fs.readJson(
+      spinner.warn(
+        "package.json not found"
+      );
+
+      return;
+
+    }
+
+
+
+    const packageJson =
+      await fs.readJson(
         packageJsonPath
       );
 
 
-      // Make the package.json's name is equal to projectName 
 
-      packageJson.name = config.projectName
-        .toLowerCase()
-        .replace(/\s+/g, "-");
-
-
-      if (config.dependencies) {
-
-        packageJson.dependencies = {
-          ...packageJson.dependencies,
-          ...config.dependencies
-        };
-
-      }
-
-
-      if (config.devDependencies) {
-
-        packageJson.devDependencies = {
-          ...packageJson.devDependencies,
-          ...config.devDependencies
-        };
-
-      }
-
-
-      if (config.scripts) {
-
-        packageJson.scripts = {
-          ...packageJson.scripts,
-          ...config.scripts
-        };
-
-      }
-
-
-      await fs.writeJson(
-        packageJsonPath,
-        packageJson,
-        {
-          spaces: 2
-        }
+    packageJson.name =
+      normalizePackageName(
+        config.projectName
       );
 
+
+
+    if (
+      config.dependencies
+    ) {
+
+      packageJson.dependencies = {
+
+        ...packageJson.dependencies,
+
+        ...config.dependencies
+
+      };
+
     }
+
+
+
+    if (
+      config.devDependencies
+    ) {
+
+      packageJson.devDependencies = {
+
+        ...packageJson.devDependencies,
+
+        ...config.devDependencies
+
+      };
+
+    }
+
+
+
+    await fs.writeJson(
+      packageJsonPath,
+      packageJson,
+      {
+        spaces:2
+      }
+    );
 
 
     spinner.succeed(
@@ -80,11 +97,27 @@ export async function updatePackageJson(config) {
 
   } catch(error) {
 
+
     spinner.fail(
       "Failed to update package.json"
     );
 
+
     throw error;
 
   }
+
+}
+
+
+
+function normalizePackageName(
+  name
+){
+
+  return name
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g,"-");
+
 }
