@@ -102,7 +102,7 @@ export const connectDB = async () => {
 
       :
 
-`
+      `
 import mongoose from "mongoose";
 
 export const connectDB = async () => {
@@ -132,19 +132,17 @@ export const connectDB = async () => {
 
 }
 
-
-
 async function setupPrisma(config) {
 
   config.dependencies = {
     ...config.dependencies,
-    "@prisma/client": "^6.0.0"
+    "@prisma/client": "latest"
   };
 
 
   config.devDependencies = {
     ...config.devDependencies,
-    prisma: "^6.0.0"
+    prisma: "latest"
   };
 
 
@@ -155,6 +153,7 @@ async function setupPrisma(config) {
 generator client {
   provider = "prisma-client-js"
 }
+
 
 datasource db {
   provider = "postgresql"
@@ -171,13 +170,16 @@ datasource db {
 
 }
 
-
-
 async function setupDrizzle(config) {
 
   config.dependencies = {
-    ...config.dependencies , 
+    ...config.dependencies,
     "drizzle-orm": "latest"
+  };
+
+  config.devDependencies = {
+    ...config.devDependencies,
+    "drizzle-kit": "latest"
   };
 
 
