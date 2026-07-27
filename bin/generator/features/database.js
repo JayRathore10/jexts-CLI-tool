@@ -5,18 +5,22 @@ import { createSpinner } from "../../utils/ui.js";
 
 export async function setupDatabase(config) {
 
-  if (config.database === "none") {
+  if (
+    config.database === "none" ||
+    !config.database
+  ) {
     return;
   }
 
+
   const spinner = createSpinner(
-    `Setting up ${config.database} database`
+    `Setting up ${config.database}`
   ).start();
 
 
   try {
 
-    switch (config.database) {
+    switch(config.database){
 
       case "mongodb":
         await setupMongoDB(config);
@@ -36,127 +40,228 @@ export async function setupDatabase(config) {
 
 
     spinner.succeed(
-      `${config.database} database configured`
+      `${config.database} configured`
     );
 
 
-  } catch (error) {
+  } catch(error){
 
     spinner.fail(
       "Database setup failed"
     );
 
     throw error;
+
   }
+
 }
 
 
 
-async function setupMongoDB(config) {
+async function setupMongoDB(config){
 
 
   config.dependencies = {
+
     ...config.dependencies,
-    mongoose: "^9.0.0"
+
+    mongoose:"^9.0.0"
+
   };
 
 
   config.env = {
+
     ...config.env,
-    MONGODB_URI: ""
+
+    MONGODB_URI:"mongodb://localhost:27017/myDB"
+
   };
 
 
-  const file =
+  const extension =
     config.language === "ts"
-      ? "db.config.ts"
-      : "db.config.js";
+      ? "ts"
+      : "js";
 
 
   const content =
-    config.language === "ts"
-      ? `
-import mongoose from "mongoose";
 
-export const connectDB = async () => {
-  try {
-    await mongoose.connect(
-      process.env.MONGODB_URI!
-    );
-
-    console.log("Database connected successfully");
-
-  } catch (error) {
-    console.log(error);
-    process.exit(1);
-  }
-};
-`
-      :
 `
 import mongoose from "mongoose";
 
-export const connectDB = async () => {
-  try {
+
+export const connectDB = async()=>{
+
+  try{
+
     await mongoose.connect(
       process.env.MONGODB_URI
     );
 
-    console.log("Database connected successfully");
 
-  } catch (error) {
+    console.log(
+      "MongoDB connected successfully"
+    );
+
+
+  }catch(error){
+
     console.log(error);
+
     process.exit(1);
+
   }
+
 };
 `;
 
 
-  const configDir = path.join(
-    config.targetDir,
-    "src",
-    "configs"
+  await writeFile(
+    config,
+    `src/configs/db.config.${extension}`,
+    content
+  );
+
+}
+
+
+
+async function setupPostgreSQL(config){
+
+
+  config.dependencies = {
+
+    ...config.dependencies,
+
+    pg:"^8.12.0"
+
+  };
+
+
+  config.env = {
+
+    ...config.env,
+
+    DATABASE_URL:"postgresql://user:password@localhost:5432/mydb"
+
+  };
+
+
+  await createSQLConfig(
+    config,
+    "postgresql"
+  );
+
+}
+
+
+
+async function setupMySQL(config){
+
+
+  config.dependencies = {
+
+    ...config.dependencies,
+
+    mysql2:"^3.11.0"
+
+  };
+
+
+  config.env = {
+
+    ...config.env,
+
+    DATABASE_URL:"mysql://user:password@localhost:3306/mydb"
+
+  };
+
+
+  await createSQLConfig(
+    config,
+    "mysql"
+  );
+
+}
+
+
+
+async function createSQLConfig(
+  config,
+  database
+){
+
+  const extension =
+    config.language === "ts"
+      ? "ts"
+      : "js";
+
+
+  const content =
+
+`
+import ${
+  database === "postgresql"
+    ? "pg"
+    : "mysql2/promise"
+} from "${
+  database === "postgresql"
+    ? "pg"
+    : "mysql2/promise"
+}";
+
+
+export const connectDB = async()=>{
+
+  try{
+
+    console.log(
+      "${database} connected"
+    );
+
+
+  }catch(error){
+
+    console.log(error);
+
+  }
+
+};
+`;
+
+
+  await writeFile(
+    config,
+    `src/configs/db.config.${extension}`,
+    content
+  );
+
+}
+
+
+
+async function writeFile(
+  config,
+  file,
+  content
+){
+
+  const filePath =
+    path.join(
+      config.targetDir,
+      file
+    );
+
+
+  await fs.ensureDir(
+    path.dirname(filePath)
   );
 
 
-  await fs.ensureDir(configDir);
-
-
   await fs.writeFile(
-    path.join(configDir, file),
+    filePath,
     content.trim()
   );
 
 }
-
-
-
-async function setupPostgreSQL(config) {
-
-  config.env = {
-    ...config.env,
-    DATABASE_URL: ""
-  };
-
-
-  config.dependencies = {
-    ...config.dependencies
-  };
-
-}
-
-
-
-async function setupMySQL(config) {
-
-  config.env = {
-    ...config.env,
-    DATABASE_URL: ""
-  };
-
-
-  config.dependencies = {
-    ...config.dependencies
-  };
-
-} 
