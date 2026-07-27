@@ -79,13 +79,25 @@ export async function updatePackageJson(config) {
 
     }
 
+    if (
+      config.devDependencies
+    ) {
 
+      packageJson.devDependencies = {
+
+        ...packageJson.devDependencies,
+
+        ...config.devDependencies
+
+      };
+
+    }
 
     await fs.writeJson(
       packageJsonPath,
       packageJson,
       {
-        spaces:2
+        spaces: 2
       }
     );
 
@@ -95,7 +107,7 @@ export async function updatePackageJson(config) {
     );
 
 
-  } catch(error) {
+  } catch (error) {
 
 
     spinner.fail(
@@ -113,11 +125,11 @@ export async function updatePackageJson(config) {
 
 function normalizePackageName(
   name
-){
+) {
 
   return name
     .trim()
     .toLowerCase()
-    .replace(/\s+/g,"-");
+    .replace(/\s+/g, "-");
 
 }
