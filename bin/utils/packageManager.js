@@ -54,3 +54,29 @@ export function getRunCommand(packageManager) {
       return "npm run dev";
   }
 }
+
+export function getInstallCommand(
+  packageManager
+){
+
+  switch(packageManager){
+
+    case "pnpm":
+      return "pnpm install";
+
+
+    case "yarn":
+      return "yarn";
+
+
+    case "bun":
+      return "bun install";
+
+
+    case "npm":
+    default:
+      return "npm install";
+
+  }
+
+}
