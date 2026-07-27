@@ -26,5 +26,5 @@ export async function promptDatabase() {
     ]
   });
 
-  return response.database;
+  return response.database ?? "none";
 }
