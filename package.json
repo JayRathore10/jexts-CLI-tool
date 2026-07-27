@@ -1,6 +1,6 @@
 {
   "name": "create-jexts",
-  "version": "1.0.18",
+  "version": "1.0.19",
   "description": "Generate a complete Express + JavaScript/TypeScript backend project.",
   "bin": {
     "create-jexts": "bin/index.js"
