@@ -5,6 +5,7 @@ import { createSpinner } from "../utils/ui.js";
 
 export async function createEnvFile(config) {
 
+
   if (
     !config.env ||
     Object.keys(config.env).length === 0
@@ -20,6 +21,7 @@ export async function createEnvFile(config) {
 
   try {
 
+
     const envPath = path.join(
       config.targetDir,
       ".env.example"
@@ -29,9 +31,12 @@ export async function createEnvFile(config) {
     let content = "";
 
 
-    for (const key of Object.keys(config.env)) {
+    for (
+      const [key, value]
+      of Object.entries(config.env)
+    ) {
 
-      content += `${key}=${config.env[key]}\n`;
+      content += `${key}=${value}\n`;
 
     }
 
@@ -49,11 +54,14 @@ export async function createEnvFile(config) {
 
   } catch(error) {
 
+
     spinner.fail(
-      "Failed to create .env.example"
+      "Failed to create environment file"
     );
+
 
     throw error;
 
   }
+
 }

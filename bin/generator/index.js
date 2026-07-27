@@ -10,11 +10,7 @@ import { initializeGit } from "./git.js";
 import { installDependencies } from "./install.js";
 import { ROOT_DIR } from "../utils/paths.js";
 
-
-
 export async function generateProject(config) {
-
-
   const targetDir = path.join(
     process.cwd(),
     config.projectName
@@ -23,49 +19,34 @@ export async function generateProject(config) {
 
   config.targetDir = targetDir;
 
-
-
   await createProjectDirectory(
     targetDir
   );
-
-
 
   await copyTemplate(
     config
   );
 
-
+  await createEnvFile(
+    config
+  );
 
   await setupFeatures(
     config
   );
 
-
-
   await updatePackageJson(
     config
   );
-
-
-
-  await createEnvFile(
-    config
-  );
-
-
 
   await updateServer(
     config
   );
 
 
-
   await configureGitignore(
     config
   );
-
-
 
   if (config.git) {
 
@@ -75,16 +56,12 @@ export async function generateProject(config) {
 
   }
 
-
-
   await installDependencies(
     config
   );
 
 
 }
-
-
 
 async function createProjectDirectory(
   targetDir
@@ -95,8 +72,6 @@ async function createProjectDirectory(
   );
 
 }
-
-
 
 async function copyTemplate(
   config
