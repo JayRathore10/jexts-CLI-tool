@@ -4,6 +4,14 @@ import { showHeader, showCompletion } from "./utils/ui.js";
 import { promptUser } from "./prompts/index.js";
 import { generateProject } from "./generator/index.js";
 
+process.on(
+  "SIGINT",
+  () => {
+    console.log("\n\nCancelled.");
+    process.exit(0);
+  }
+);
+
 async function main() {
   try {
     showHeader();
@@ -13,8 +21,16 @@ async function main() {
     await generateProject(config);
 
     showCompletion(config);
+
   } catch (error) {
-    console.error(error);
+    console.log();
+
+    console.error(
+      "✖ JEXTS failed to create project"
+    );
+
+    console.error(error.message);
+
     process.exit(1);
   }
 }
