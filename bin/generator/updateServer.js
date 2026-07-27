@@ -5,14 +5,12 @@ import { createSpinner } from "../utils/ui.js";
 
 export async function updateServer(config) {
 
-
   const spinner = createSpinner(
     "Configuring server"
   ).start();
 
 
   try {
-
 
     await updateAppFile(config);
 
@@ -40,7 +38,9 @@ export async function updateServer(config) {
 
 
 
-async function updateAppFile(config){
+
+
+async function updateAppFile(config) {
 
 
   const extension =
@@ -58,9 +58,10 @@ async function updateAppFile(config){
 
   if(
     !await fs.pathExists(appPath)
-  ){
+  ) {
     return;
   }
+
 
 
   let content =
@@ -71,26 +72,26 @@ async function updateAppFile(config){
 
 
 
-  let imports = "";
+  let imports = [];
 
   let routes = "";
 
 
 
-  if(
-    config.features?.exampleApi
-  ){
+  // Example API
 
-    imports +=
-config.language === "ts"
-?
-`import healthRoute from "./routes/health.route";\n`
-:
-`import healthRoute from "./routes/health.route.js";\n`;
+  if(config.exampleApi) {
 
 
-    routes +=
-`
+    imports.push(
+      config.language === "ts"
+        ? `import healthRoute from "./routes/health.route";`
+        : `import healthRoute from "./routes/health.route.js";`
+    );
+
+
+    routes += `
+
 app.use(
   "/api",
   healthRoute
@@ -101,20 +102,22 @@ app.use(
 
 
 
+  // JWT Authentication
+
   if(
     config.authentication === "jwt"
-  ){
-
-    imports +=
-config.language === "ts"
-?
-`import authRoute from "./routes/auth.route";\n`
-:
-`import authRoute from "./routes/auth.route.js";\n`;
+  ) {
 
 
-    routes +=
-`
+    imports.push(
+      config.language === "ts"
+        ? `import authRoute from "./routes/auth.route";`
+        : `import authRoute from "./routes/auth.route.js";`
+    );
+
+
+    routes += `
+
 app.use(
   "/api/auth",
   authRoute
@@ -125,29 +128,62 @@ app.use(
 
 
 
-  if(imports){
 
-    content =
-imports + "\n" + content;
+  // Add imports only if missing
+
+  if(imports.length) {
+
+
+    const newImports =
+      imports
+        .filter(
+          item =>
+            !content.includes(item)
+        )
+        .join("\n");
+
+
+
+    if(newImports) {
+
+
+      content =
+        content.replace(
+          "import express",
+          `${newImports}\n\nimport express`
+        );
+
+    }
 
   }
 
 
 
-  if(routes){
 
-    content =
-content.replace(
-"app.use(express.json());",
+  // Add routes
 
+  if(routes) {
+
+
+    if(
+      !content.includes("app.use(\n  \"/api\"")
+    ) {
+
+
+      content =
+        content.replace(
+          "app.use(express.json());",
 `
 app.use(express.json());
 
 ${routes}
 `
-);
+        );
+
+    }
 
   }
+
 
 
 
@@ -162,13 +198,16 @@ ${routes}
 
 
 
-async function updateServerFile(config){
+
+
+async function updateServerFile(config) {
 
 
   const extension =
     config.language === "ts"
       ? "ts"
       : "js";
+
 
 
   const serverPath =
@@ -179,13 +218,13 @@ async function updateServerFile(config){
     );
 
 
+
   if(
     !await fs.pathExists(serverPath)
-  ){
-
+  ) {
     return;
-
   }
+
 
 
 
@@ -197,37 +236,50 @@ async function updateServerFile(config){
 
 
 
+
   if(
+    config.database &&
     config.database !== "none"
-  ){
+  ) {
 
 
     const dbImport =
-config.language === "ts"
-?
-`import { connectDB } from "./configs/db.config";`
-:
-`import { connectDB } from "./configs/db.config.js";`;
-
-
-    content =
-dbImport +
-"\n" +
-content;
+      config.language === "ts"
+        ? `import { connectDB } from "./configs/db.config";`
+        : `import { connectDB } from "./configs/db.config.js";`;
 
 
 
-    content =
-content.replace(
-"// Connect DB locally",
-`
-connectDB();
+    if(
+      !content.includes(dbImport)
+    ) {
 
-// Connect DB locally
-`
-);
+
+      content =
+        dbImport +
+        "\n" +
+        content;
+
+    }
+
+
+
+
+    if(
+      !content.includes("connectDB();")
+    ) {
+
+
+      content =
+        content.replace(
+          "// Connect DB locally",
+          "connectDB();"
+        );
+
+    }
 
   }
+
 
 
 
