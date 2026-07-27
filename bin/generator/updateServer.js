@@ -5,87 +5,235 @@ import { createSpinner } from "../utils/ui.js";
 
 export async function updateServer(config) {
 
-  if (
-    config.orm !== "mongoose"
-  ) {
-    return;
-  }
-
 
   const spinner = createSpinner(
-    "Configuring database connection"
+    "Configuring server"
   ).start();
 
 
   try {
 
-    const serverFile =
-      config.language === "ts"
-        ? "server.ts"
-        : "server.js";
 
+    await updateAppFile(config);
 
-    const serverPath = path.join(
-      config.targetDir,
-      "src",
-      serverFile
-    );
-
-
-    if (!await fs.pathExists(serverPath)) {
-      spinner.succeed(
-        "Server configuration skipped"
-      );
-      return;
-    }
-
-
-    let content = await fs.readFile(
-      serverPath,
-      "utf-8"
-    );
-
-
-    const importLine =
-      config.language === "ts"
-        ? `import { connectDB } from "./configs/db.config";`
-        : `import { connectDB } from "./configs/db.config.js";`;
-
-
-    if (!content.includes("connectDB")) {
-
-      content =
-`${importLine}
-
-${content}`;
-
-
-      content = content.replace(
-        "const PORT = process.env.PORT || 3000;",
-        `const PORT = process.env.PORT || 3000;\n\nconnectDB();`
-      );
-
-
-      await fs.writeFile(
-        serverPath,
-        content
-      );
-
-    }
+    await updateServerFile(config);
 
 
     spinner.succeed(
-      "Database connection configured"
+      "Server configured"
     );
 
 
   } catch(error) {
 
+
     spinner.fail(
-      "Failed to configure database connection"
+      "Failed to configure server"
     );
+
 
     throw error;
 
   }
+
+}
+
+
+
+async function updateAppFile(config){
+
+
+  const extension =
+    config.language === "ts"
+      ? "ts"
+      : "js";
+
+
+  const appPath = path.join(
+    config.targetDir,
+    "src",
+    `app.${extension}`
+  );
+
+
+  if(
+    !await fs.pathExists(appPath)
+  ){
+    return;
+  }
+
+
+  let content =
+    await fs.readFile(
+      appPath,
+      "utf-8"
+    );
+
+
+
+  let imports = "";
+
+  let routes = "";
+
+
+
+  if(
+    config.features?.exampleApi
+  ){
+
+    imports +=
+config.language === "ts"
+?
+`import healthRoute from "./routes/health.route";\n`
+:
+`import healthRoute from "./routes/health.route.js";\n`;
+
+
+    routes +=
+`
+app.use(
+  "/api",
+  healthRoute
+);
+`;
+
+  }
+
+
+
+  if(
+    config.authentication === "jwt"
+  ){
+
+    imports +=
+config.language === "ts"
+?
+`import authRoute from "./routes/auth.route";\n`
+:
+`import authRoute from "./routes/auth.route.js";\n`;
+
+
+    routes +=
+`
+app.use(
+  "/api/auth",
+  authRoute
+);
+`;
+
+  }
+
+
+
+  if(imports){
+
+    content =
+imports + "\n" + content;
+
+  }
+
+
+
+  if(routes){
+
+    content =
+content.replace(
+"app.use(express.json());",
+
+`
+app.use(express.json());
+
+${routes}
+`
+);
+
+  }
+
+
+
+  await fs.writeFile(
+    appPath,
+    content
+  );
+
+}
+
+
+
+
+
+async function updateServerFile(config){
+
+
+  const extension =
+    config.language === "ts"
+      ? "ts"
+      : "js";
+
+
+  const serverPath =
+    path.join(
+      config.targetDir,
+      "src",
+      `server.${extension}`
+    );
+
+
+  if(
+    !await fs.pathExists(serverPath)
+  ){
+
+    return;
+
+  }
+
+
+
+  let content =
+    await fs.readFile(
+      serverPath,
+      "utf-8"
+    );
+
+
+
+  if(
+    config.database !== "none"
+  ){
+
+
+    const dbImport =
+config.language === "ts"
+?
+`import { connectDB } from "./configs/db.config";`
+:
+`import { connectDB } from "./configs/db.config.js";`;
+
+
+    content =
+dbImport +
+"\n" +
+content;
+
+
+
+    content =
+content.replace(
+"// Connect DB locally",
+`
+connectDB();
+
+// Connect DB locally
+`
+);
+
+  }
+
+
+
+  await fs.writeFile(
+    serverPath,
+    content
+  );
+
 }
