@@ -6,6 +6,7 @@ import { configureGitignore } from "./gitignore.js";
 import { installDependencies } from "./installDependencies.js";
 import { initializeGit } from "./initializeGit.js";
 import { createEnvFile } from "./env.js";
+import { updateServer } from "./updateServer.js";
 
 export async function generateProject(config) {
   await createProject(config);
@@ -13,6 +14,8 @@ export async function generateProject(config) {
   await copyTemplate(config);
 
   await setupFeatures(config);
+
+  await updateServer(config);
 
   await updatePackageJson(config);
 
