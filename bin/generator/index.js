@@ -5,6 +5,7 @@ import { updatePackageJson } from "./packageJson.js";
 import { configureGitignore } from "./gitignore.js";
 import { installDependencies } from "./installDependencies.js";
 import { initializeGit } from "./initializeGit.js";
+import { createEnvFile } from "./env.js";
 
 export async function generateProject(config) {
   await createProject(config);
@@ -14,6 +15,8 @@ export async function generateProject(config) {
   await setupFeatures(config);
 
   await updatePackageJson(config);
+
+  await createEnvFile(config);
 
   await configureGitignore(config);
 
