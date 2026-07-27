@@ -1,5 +1,6 @@
 import { spawnSync } from "child_process";
 import { createSpinner, showInstallError } from "../utils/ui.js";
+import { getInstallCommand } from "../utils/packageManager.js";
 
 export async function installDependencies(config) {
   const spinner = createSpinner("Installing dependencies").start();
@@ -8,6 +9,13 @@ export async function installDependencies(config) {
     const { command, args } = getInstallCommand(
       config.packageManager
     );
+
+    console.log({
+      packageManager: config.packageManager,
+      command,
+      args,
+      targetDir: config.targetDir
+    });
 
     spinner.stop();
 
@@ -23,7 +31,11 @@ export async function installDependencies(config) {
 
     spinner.succeed("Dependencies installed");
   } catch (error) {
-    spinner.fail("Dependency installation failed");
+    spinner.fail(
+      "Dependency installation failed"
+    );
+
+    console.error(error);
 
     showInstallError(config);
 

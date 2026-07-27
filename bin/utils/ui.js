@@ -31,7 +31,12 @@ export function createSpinner(message) {
   });
 }
 
-export function showCompletion(projectName, packageManager) {
+export function showCompletion(config) {
+
+  const projectName = config.projectName;
+  const packageManager = config.packageManager;
+
+
   const runCommand =
     packageManager === "npm"
       ? "npm run dev"
@@ -39,7 +44,9 @@ export function showCompletion(projectName, packageManager) {
       ? "yarn dev"
       : `${packageManager} dev`;
 
+
   console.log();
+
 
   console.log(
     boxen(
@@ -57,6 +64,7 @@ ${colors.heading("Next steps")}
       }
     )
   );
+
 }
 
 export function showInstallError(config) {

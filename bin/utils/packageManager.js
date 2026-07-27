@@ -39,27 +39,43 @@ export function getRunCommand(packageManager) {
   }
 }
 
-export function getInstallCommand(
-  packageManager
-){
+export function getInstallCommand(packageManager) {
 
-  switch(packageManager){
+  switch(packageManager) {
+
+    case "npm":
+      return {
+        command: "npm",
+        args: ["install"]
+      };
+
 
     case "pnpm":
-      return "pnpm install";
+      return {
+        command: "pnpm",
+        args: ["install"]
+      };
 
 
     case "yarn":
-      return "yarn";
+      return {
+        command: "yarn",
+        args: []
+      };
 
 
     case "bun":
-      return "bun install";
+      return {
+        command: "bun",
+        args: ["install"]
+      };
 
 
-    case "npm":
     default:
-      return "npm install";
+      return {
+        command: "npm",
+        args: ["install"]
+      };
 
   }
 
