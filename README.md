@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./assets/logo.png" alt="JEXTS" style="width:100%; max-height:180px; object-fit:contain;">
+  <img src="./assets/logo.png" alt="JEXTS" style="width:100%; max-height:100px; object-fit:contain;">
 </p>
 
 # JEXTS
