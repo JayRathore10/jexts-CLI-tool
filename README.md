@@ -1,66 +1,86 @@
-# jexts
+<p align="center">
+  <img src="./assets/logo.png" alt="JEXTS" style="width:100%; max-height:180px; object-fit:contain;">
+</p>
 
-`jexts` is a Node.js CLI tool to quickly scaffold **Express backend projects** in **JavaScript or TypeScript**. It simplifies project setup so you can start coding immediately.
+# JEXTS
+
+A modern CLI for scaffolding production-ready Express.js applications.
+
+---
+
+## Overview
+
+JEXTS is a Node.js CLI for generating production-ready Express.js backend projects in JavaScript or TypeScript. It eliminates repetitive setup and provides a clean foundation for building APIs and backend services.
+
+---
 
 ## Features
 
-* Generate a ready-to-use Express backend in JS or TS
-* Pre-configured folder structure with templates
-* Works with `npm create` for fast project initialization
+- Express.js project scaffolding
+- JavaScript and TypeScript support
+- Clean project structure
+- Minimal configuration
+- Fast initialization with `npm create`
+- Ready for backend development
+
+---
 
 ## Installation
-
-You don’t need to install globally. Use `npm create`:
 
 ```bash
 npm create jexts@latest
 ```
 
-Follow the prompts to select **JavaScript** or **TypeScript** and project name.
+Follow the interactive prompts to configure your project.
+
+---
 
 ## Usage
-
-After creating your project, navigate to it:
 
 ```bash
 cd <project-name>
 ```
 
-Run development server:
-
 ```bash
-# For JS projects
-npm run dev
-
-# For TS projects
 npm run dev
 ```
 
-Build and start (for TS projects):
+For TypeScript projects:
 
 ```bash
 npm run build
 npm start
 ```
 
+---
+
 ## Project Structure
 
-A typical project looks like:
-
-```
+```text
 project-name/
-├─ src/          # Source files (TS or JS)
-├─ dist/         # Compiled files (TS only)
-├─ .gitignore
-├─ node_modules/
-├─ package.json
-└─ tsconfig.json # Only for TS projects
+├── src/
+├── dist/          # TypeScript only
+├── package.json
+├── tsconfig.json  # TypeScript only
+├── .gitignore
+└── node_modules/
 ```
+
+---
+
+## Requirements
+
+- Node.js 18+
+- npm
+
+---
 
 ## Contributing
 
-Contributions are welcome! Open an issue or pull request for improvements or fixes.
+Contributions are welcome. Feel free to open an issue or submit a pull request.
+
+---
 
 ## License
 
-MIT License
+MIT
