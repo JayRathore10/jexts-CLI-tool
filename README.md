@@ -1,6 +1,10 @@
-<div align="center">
-   <img src="./assets/logo.png" alt="JEXTS" width="1000">
-</div>
+<p align="center">
+  <img
+    src="https://raw.githubusercontent.com/JayRathore10/jexts-CLI-tool/main/assets/logo.png"
+    alt="JEXTS"
+    width="1000"
+  />
+</p>
 
 # JEXTS
 
