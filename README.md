@@ -1,5 +1,5 @@
 <div align="center">
-   <img src="./assets/banner.png" alt="JEXTS" width="1000">
+   <img src="./assets/logo.png" alt="JEXTS" width="1000">
 </div>
 
 # JEXTS
