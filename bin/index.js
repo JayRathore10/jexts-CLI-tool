@@ -36,5 +36,3 @@ async function main() {
 }
 
 main();
-// have to remove extra spacing in example API
-// have to make sure all the TS types 
