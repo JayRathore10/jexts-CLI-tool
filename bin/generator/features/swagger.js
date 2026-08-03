@@ -2,77 +2,41 @@ import fs from "fs-extra";
 import path from "path";
 import { createSpinner } from "../../utils/ui.js";
 
-
 export async function setupSwagger(config) {
-
-  if (
-    !config.features?.swagger
-  ) {
+  if (!config.features?.swagger) {
     return;
   }
 
-
-  const spinner = createSpinner(
-    "Setting up Swagger"
-  ).start();
-
+  const spinner = createSpinner("Setting up Swagger").start();
 
   try {
-
     config.dependencies = {
       ...config.dependencies,
-
       "swagger-jsdoc": "^6.2.8",
       "swagger-ui-express": "^5.0.0"
     };
 
-
     if (config.language === "ts") {
-
       config.devDependencies = {
         ...config.devDependencies,
-
         "@types/swagger-ui-express": "^4.1.8"
       };
-
     }
 
-
     await createSwaggerConfig(config);
-
     await updateAppFile(config);
 
-
-    spinner.succeed(
-      "Swagger configured"
-    );
-
-
-  } catch(error) {
-
-    spinner.fail(
-      "Swagger setup failed"
-    );
-
+    spinner.succeed("Swagger configured");
+  } catch (error) {
+    spinner.fail("Swagger setup failed");
     throw error;
-
   }
-
 }
 
-
-
 async function createSwaggerConfig(config) {
+  const extension = config.language === "ts" ? "ts" : "js";
 
-
-  const extension =
-    config.language === "ts"
-      ? "ts"
-      : "js";
-
-
-  const swaggerContent =
-`
+  const swaggerContent = `
 const swaggerDefinition = {
   openapi: "3.0.0",
 
@@ -89,10 +53,8 @@ const swaggerDefinition = {
   ]
 };
 
-
 export default swaggerDefinition;
 `;
-
 
   const swaggerDir = path.join(
     config.targetDir,
@@ -100,11 +62,7 @@ export default swaggerDefinition;
     "configs"
   );
 
-
-  await fs.ensureDir(
-    swaggerDir
-  );
-
+  await fs.ensureDir(swaggerDir);
 
   await fs.writeFile(
     path.join(
@@ -113,19 +71,10 @@ export default swaggerDefinition;
     ),
     swaggerContent.trim()
   );
-
 }
 
-
-
 async function updateAppFile(config) {
-
-
-  const appFile =
-    config.language === "ts"
-      ? "app.ts"
-      : "app.js";
-
+  const appFile = config.language === "ts" ? "app.ts" : "app.js";
 
   const appPath = path.join(
     config.targetDir,
@@ -133,53 +82,34 @@ async function updateAppFile(config) {
     appFile
   );
 
-
-  if (!await fs.pathExists(appPath)) {
+  if (!(await fs.pathExists(appPath))) {
     return;
   }
 
+  let content = await fs.readFile(appPath, "utf-8");
 
-  let content = await fs.readFile(
-    appPath,
-    "utf-8"
-  );
-
-
-  if (
-    content.includes("swagger-ui-express")
-  ) {
+  if (content.includes("swagger-ui-express")) {
     return;
   }
-
 
   const importCode =
     config.language === "ts"
-
-      ?
-
-`
+      ? `
 import swaggerUi from "swagger-ui-express";
 import swaggerConfig from "./configs/swagger.config";
 `
-
-      :
-
-`
+      : `
 import swaggerUi from "swagger-ui-express";
 import swaggerConfig from "./configs/swagger.config.js";
 `;
 
-
-  content =
-`${importCode}
+  content = `${importCode}
 
 ${content}`;
 
-
-
   content = content.replace(
     "app.use(express.json());",
-`
+    `
 app.use(express.json());
 
 app.use(
@@ -190,10 +120,5 @@ app.use(
 `
   );
 
-
-  await fs.writeFile(
-    appPath,
-    content
-  );
-
+  await fs.writeFile(appPath, content);
 }

@@ -9,7 +9,6 @@ import { setupDocker } from "./docker.js";
 import { setupSwagger } from "./swagger.js";
 import { setupExampleApi } from "./exampleApi.js";
 
-
 const features = [
   setupDatabase,
   setupORM,
@@ -23,14 +22,9 @@ const features = [
   setupExampleApi
 ];
 
-
-
 export async function featureRegistry(config) {
-
   for (const feature of features) {
-
     await feature(config);
-
   }
 
 }
